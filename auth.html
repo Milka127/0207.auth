@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <script src="https://kit.fontawesome.com/dc4f8560f3.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
-    <title>Регистрация</title>
+    <title>Вход</title>
 
     <style>
         body {
@@ -14,6 +14,7 @@
             background-color: rgba(255, 251, 0, 0.438);
         }
         form {
+            margin-top: 25px;
             background-color: #fff;
             padding: 2rem;
             filter: drop-shadow(1.5px 2px 4px hsl(56, 38%, 58%));
@@ -23,13 +24,6 @@
             transform: translateY(-6px);
             filter: drop-shadow(1.5px 4px 16px hsl(56, 38%, 58%));
         }
-        /* Для людей тех, кто не любит анимацию */
-        /* @media (prefers-reduced-motion: no-preference) {
-            form {
-                transition: filter 300ms, transform 300ms;
-                will-change: transform;
-            }
-        } */
         .fa-solid {
             color: rgb(133, 49, 0);
         }
@@ -42,46 +36,28 @@
     </style>
     </head>
     <div class="container">
-        <h1 class="my-5 text-center text-danger">Регистрация на сайте</h1>
-        <div class="col-md-5 mx-auto">
-            <form action="php/reg.php" method="POST">
+        <h1 class="mt-5 text-center text-danger">Вход на сайте</h1>
+        <div class="col-md-5 mx-auto"></div>
+            <form onsubmit="searchForm(this); return false;">
                 <div class="input-group mb-2">
                     <div class="input-group-prepend">
                         <div class="input-group-text">
-                            <i class="fa-solid fa-user-astronaut fa-lg fa-fw"></i>
-                        </div>
-                    </div>
-                    <input type="text" class="form-control" placeholder="Имя" required name="name">
-                </div>
-                <div class="input-group mb-2">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">
-                            <i class="fa-solid fa-user-astronaut fa-lg fa-fw"></i>
+                            <i class="fa-solid fa-at fa-lg fa-fw"></i>
                         </div>
                     </div>
                     <input
-                        type="text"
+                        type="email"
                         class="form-control"
-                        placeholder="Фамилия"
-                        required
-                        name="lastname"
-                        >
-                </div>
-                <div class="input-group mb-2">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text"><i class="fa-solid fa-envelope fa-lg fa-fw"></i></div>
-                    </div>
-                    <input 
-                        type="email" 
-                        class="form-control" 
+                        id="inlineFormInputGroupUsername"
                         placeholder="E-mail" 
                         required name="email"
                         >
                 </div>
-                <p id="info"></p>
                 <div class="input-group mb-2">
                     <div class="input-group-prepend">
-                        <div class="input-group-text"><i class="fa-solid fa-lock fa-lg fa-fw"></i></div>
+                        <div class="input-group-text">
+                            <i class="fa-solid fa-key fa-lg fa-fw"></i>
+                        </div>
                     </div>
                     <input
                         type="password"
@@ -91,38 +67,31 @@
                         id="formPass"
                         name="pass"
                         >
-                    <span
-                        onmousedown="formPass.type ='text'; this.nextElementSibling.hidden = false; this.hidden = true;"
-                        >&nbsp;<i class="fa-solid fa-eye fa-lg"></i
-                    ></span>
-                    <span
-                        hidden
-                        onmouseup="formPass.type = 'password'; this.previousElementSibling.hidden = false; this.hidden = true;"
-                        >&nbsp;<i class="fa-solid fa-eye-slash fa-lg"></i
-                    ></span>
+                    <span onmousedown="formPass.type = 'text'; this.nextElementSibling.hidden = false; this.hidden = true">&nbsp;
+                        <i class="fa-solid fa-eye fa-lg"></i>
+                    </span>
+                    <span hidden onmouseup="formPass.type = 'password'; this.previousElementSibling.hidden = false; this.hidden = true">&nbsp;
+                        <i class="fa-solid fa-eye-slash fa-lg"></i>
+                    </span>
                 </div>
-                <div class="form-check">
-                    <input 
-                        class="form-check-input" 
-                        type="checkbox" 
-                        id="autoSizingCheck2" 
-                        required
-                        >
-                    <label class="form-check-label" for="autoSizingCheck2">
-                        Даю согласие на обработку персональных данных
-                    </label>
-                </div>
-                <input type="submit" class="btn btn-danger form-control" value="Зарегистрироваться" />
+                <p id="info"></p>
+                <input type="submit" class="btn btn-danger form-control" value="Войти">
             </form>
         </div>
     </div>
+
     <script>
-        async function sendForm() {
-            let response = await fetch ("php/reg.php", {
+        async function searchForm(form) {
+            let response = await fetch("php/auth_obr.php", {
                 method: "POST",
-                body: new FormData
+                body: new FormData(form),
             });
-            console.log(response.text());
+            let result = await response.text();
+            if (result === "ok") {
+                alert("Вы успешно вошли!");
+            } else {
+                info.innerHTML = "Неправильный логин или пароль.";
+            }
         }
     </script>
 
